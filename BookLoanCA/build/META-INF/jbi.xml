@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jbi xmlns="http://java.sun.com/xml/ns/jbi" xmlns:ns1="BookLoanCA" xmlns:ns2="http://enterprise.netbeans.org/bpel/BookStatus/bookStatus" xmlns:ns3="http://enterprise.netbeans.org/bpel/BookLoan/bookLoanCB" xmlns:ns4="http://enterprise.netbeans.org/bpel/BookLoan/bookLoan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/jbi ./jbi.xsd">
+    <service-assembly>
+        <identification>
+            <name>BookLoanCA</name>
+            <description>Represents the Service Assembly of BookLoanCA</description>
+        </identification>
+        <service-unit>
+            <identification>
+                <name>BookLoanCA-BookLoan</name>
+                <description>Represents this Service Unit</description>
+            </identification>
+            <target>
+                <artifacts-zip>BookLoan.jar</artifacts-zip>
+                <component-name>sun-bpel-engine</component-name>
+            </target>
+        </service-unit>
+        <service-unit>
+            <identification>
+                <name>BookLoanCA-sun-http-binding</name>
+                <description>Represents this Service Unit</description>
+            </identification>
+            <target>
+                <artifacts-zip>sun-http-binding.jar</artifacts-zip>
+                <component-name>sun-http-binding</component-name>
+            </target>
+        </service-unit>
+        <connections>
+            <connection>
+                <consumer endpoint-name="casaPort3" service-name="ns1:BookLoanCAService3"/>
+                <provider endpoint-name="LoanProcessTypeRole_myRole" service-name="ns2:BookStatusPL"/>
+            </connection>
+            <connection>
+                <consumer endpoint-name="casaPort2" service-name="ns1:BookLoanCAService2"/>
+                <provider endpoint-name="BookLoanCallbackWSDLPortTypeRole_myRole" service-name="ns3:BookLoanCBPL"/>
+            </connection>
+            <connection>
+                <consumer endpoint-name="casaPort1" service-name="ns1:BookLoanCAService1"/>
+                <provider endpoint-name="BookLoanWSDLPortTypeRole_myRole" service-name="ns4:BookLoanPL"/>
+            </connection>
+            <connection>
+                <consumer endpoint-name="BookLoanCallbackWSDLPortTypeRole_partnerRole" service-name="ns4:BookLoanCBPL"/>
+                <provider endpoint-name="casaPort2" service-name="ns1:BookLoanCAService2"/>
+            </connection>
+            <connection>
+                <consumer endpoint-name="LoanProcessTypeRole_partnerRole" service-name="ns4:BookStatusPL"/>
+                <provider endpoint-name="casaPort3" service-name="ns1:BookLoanCAService3"/>
+            </connection>
+        </connections>
+    </service-assembly>
+</jbi>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<process
+    name="bookStatus"
+    targetNamespace="http://enterprise.netbeans.org/bpel/BookStatus/bookStatus"
+    xmlns:tns="http://enterprise.netbeans.org/bpel/BookStatus/bookStatus"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+    xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
+    xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2"
+    xmlns:sxat="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Attachment"
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" 
+    xmlns:ns0="http://enterprise.netbeans.org/bpel/WizardCorrelationProperties">
+    <import namespace="http://karelia.fi/edu/wsdl/BookStatus" location="BookStatus.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <!-- import namespace="http://enterprise.netbeans.org/bpel/WizardCorrelationProperties" location="WizardCorrelationProperties.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/ -->
+    <partnerLinks>
+        <partnerLink name="BookStatusPL" xmlns:ns="http://karelia.fi/edu/wsdl/BookStatus" partnerLinkType="ns:BookStatus" myRole="LoanProcessTypeRole"/>
+    </partnerLinks>
+    <variables>
+        <variable name="GetBookStatusOut" xmlns:ns="http://karelia.fi/edu/wsdl/BookStatus" messageType="ns:GetBookStatusResponse"/>
+        <variable name="UpdateBookStatusOut" xmlns:ns="http://karelia.fi/edu/wsdl/BookStatus" messageType="ns:UpdateBookStatusResponse"/>
+        <variable name="UpdateBookStatusIn" xmlns:ns="http://karelia.fi/edu/wsdl/BookStatus" messageType="ns:UpdateBookStatusRequest"/>
+        <variable name="GetBookStatusIn" xmlns:ns="http://karelia.fi/edu/wsdl/BookStatus" messageType="ns:GetBookStatusRequest"/>
+    </variables>
+    <pick name="GetOrUpdate" createInstance="yes">
+        <onMessage partnerLink="BookStatusPL" operation="GetBookStatus" xmlns:ns="http://karelia.fi/edu/wsdl/BookStatus" portType="ns:BookStatusPortType" variable="GetBookStatusIn">
+            <sequence name="Sequence3">
+                <if name="If1">
+                    <condition>$GetBookStatusIn.bookid = '1'</condition>
+                        <sequence name="Sequence2">
+                            <assign name="Assign1">
+                                    <copy>
+                                            <from>'Available'</from>
+                                                <to variable="GetBookStatusOut" part="bookStatus"/>
+                                        </copy>
+                                </assign>
+                        </sequence>
+                        <elseif>
+                            <condition>$GetBookStatusIn.bookid = '2'</condition>
+                            <assign name="Assign2">
+                                <copy>
+                                    <from>'OnLoan'</from>
+                                    <to variable="GetBookStatusOut" part="bookStatus"/>
+                                </copy>
+                            </assign>
+                        </elseif>
+                        <elseif>
+                            <condition>$GetBookStatusIn.bookid = '3'</condition>
+                            <assign name="Assign3">
+                                <copy>
+                                    <from>'OnHold'</from>
+                                    <to variable="GetBookStatusOut" part="bookStatus"/>
+                                </copy>
+                            </assign>
+                        </elseif>
+                    <else>
+                        <assign name="Assign4">
+                            <copy>
+                                <from>'NotAvailable'</from>
+                                <to variable="GetBookStatusOut" part="bookStatus"/>
+                            </copy>
+                        </assign>
+                    </else>
+                </if>
+                <reply name="Reply" partnerLink="BookStatusPL" operation="GetBookStatus" portType="ns:BookStatusPortType" variable="GetBookStatusOut"/>
+            </sequence>
+        </onMessage>
+        <onMessage partnerLink="BookStatusPL" operation="UpdateBookStatus" xmlns:ns="http://karelia.fi/edu/wsdl/BookStatus" portType="ns:BookStatusPortType" variable="UpdateBookStatusIn">
+            <sequence name="Sequence1">
+                <assign name="FinishTheCall">
+                    <copy>
+                        <from>'OK'</from>
+                        <to variable="UpdateBookStatusOut" part="response"/>
+                    </copy>
+                </assign>
+                <reply name="UpdateReply" partnerLink="BookStatusPL" operation="UpdateBookStatus" portType="ns:BookStatusPortType" variable="UpdateBookStatusOut"/>
+            </sequence>
+        </onMessage>
+    </pick>
+</process>

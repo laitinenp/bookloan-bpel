@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<process
+    name="bookLoanCB"
+    targetNamespace="http://enterprise.netbeans.org/bpel/BookLoan/bookLoanCB"
+    xmlns:tns="http://enterprise.netbeans.org/bpel/BookLoan/bookLoanCB"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+    xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
+    xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2"
+    xmlns:sxat="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Attachment"
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling">
+   <import namespace="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" location="BookLoanCallbackWSDL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+   <partnerLinks>
+      <partnerLink name="BookLoanCBPL" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" partnerLinkType="tns:BookLoanCallbackWSDL" myRole="BookLoanCallbackWSDLPortTypeRole"/>
+   </partnerLinks>
+   <variables>
+      <variable name="CheckoutConfirmationIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:CheckoutConfirmationRequest"/>
+      <variable name="BookCancellationIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:BookCancellationRequest"/>
+      <variable name="HoldConfirmationIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:HoldConfirmationRequest"/>
+      <variable name="OfferToHoldIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:OfferToHoldRequest"/>
+      <variable name="CheckoutConfirmationOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:CheckoutConfirmationResponse"/>
+      <variable name="BookCancellationOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:BookCancellationResponse"/>
+      <variable name="HoldConfirmationOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:HoldConfirmationResponse"/>
+      <variable name="OfferToHoldOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:OfferToHoldResponse"/>
+   </variables>
+   <sequence>
+      <pick name="SimulatorWithEmptyOperations" createInstance="yes">
+         <onMessage partnerLink="BookLoanCBPL" operation="OfferToHold" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" portType="tns:BookLoanCallbackWSDLPortType" variable="OfferToHoldIn">
+            <sequence name="Sequence1">
+               <assign name="Assign1">
+                  <copy>
+                     <from>'OK'</from>
+                     <to variable="OfferToHoldOut" part="result"/>
+                  </copy>
+               </assign>
+               <reply name="Reply1" partnerLink="BookLoanCBPL" operation="OfferToHold" portType="tns:BookLoanCallbackWSDLPortType" variable="OfferToHoldOut"/>
+            </sequence>
+         </onMessage>
+         <onMessage partnerLink="BookLoanCBPL" operation="HoldConfirmation" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" portType="tns:BookLoanCallbackWSDLPortType" variable="HoldConfirmationIn">
+            <sequence name="Sequence2">
+               <assign name="Assign2">
+                  <copy>
+                     <from>'OK'</from>
+                     <to variable="HoldConfirmationOut" part="result"/>
+                  </copy>
+               </assign>
+               <reply name="Reply2" partnerLink="BookLoanCBPL" operation="HoldConfirmation" portType="tns:BookLoanCallbackWSDLPortType" variable="HoldConfirmationOut"/>
+            </sequence>
+         </onMessage>
+         <onMessage partnerLink="BookLoanCBPL" operation="BookCancellation" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" portType="tns:BookLoanCallbackWSDLPortType" variable="BookCancellationIn">
+            <sequence name="Sequence3">
+               <assign name="Assign3">
+                  <copy>
+                     <from>'OK'</from>
+                     <to variable="BookCancellationOut" part="part1"/>
+                  </copy>
+               </assign>
+               <reply name="Reply3" partnerLink="BookLoanCBPL" operation="BookCancellation" portType="tns:BookLoanCallbackWSDLPortType" variable="BookCancellationOut"/>
+            </sequence>
+         </onMessage>
+         <onMessage partnerLink="BookLoanCBPL" operation="CheckoutConfirmation" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" portType="tns:BookLoanCallbackWSDLPortType" variable="CheckoutConfirmationIn">
+            <sequence name="Sequence4">
+               <assign name="Assign4">
+                  <copy>
+                     <from>'OK'</from>
+                     <to variable="CheckoutConfirmationOut" part="result"/>
+                  </copy>
+               </assign>
+               <reply name="Reply4" partnerLink="BookLoanCBPL" operation="CheckoutConfirmation" portType="tns:BookLoanCallbackWSDLPortType" variable="CheckoutConfirmationOut"/>
+            </sequence>
+         </onMessage>
+      </pick>
+   </sequence>
+</process>

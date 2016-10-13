@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="BookLoanCallbackWSDL"
+    targetNamespace="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL"
+    xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype">
+    <types/>
+    <message name="OfferToHoldRequest">
+        <part name="bookid" type="xsd:string"/>
+        <part name="customerid" type="xsd:string"/>
+    </message>
+    <message name="OfferToHoldResponse">
+        <part name="result" type="xsd:string"/>
+    </message>
+    <message name="HoldConfirmationRequest">
+        <part name="bookid" type="xsd:string"/>
+        <part name="customerid" type="xsd:string"/>
+    </message>
+    <message name="HoldConfirmationResponse">
+        <part name="result" type="xsd:string"/>
+    </message>
+    <message name="BookCancellationRequest">
+        <part name="bookid" type="xsd:string"/>
+        <part name="customerid" type="xsd:string"/>
+    </message>
+    <message name="BookCancellationResponse">
+        <part name="part1" type="xsd:string"/>
+    </message>
+    <message name="CheckoutConfirmationRequest">
+        <part name="bookid" type="xsd:string"/>
+        <part name="customerid" type="xsd:string"/>
+    </message>
+    <message name="CheckoutConfirmationResponse">
+        <part name="result" type="xsd:string"/>
+    </message>
+    <portType name="BookLoanCallbackWSDLPortType">
+        <operation name="OfferToHold">
+            <input name="input1" message="tns:OfferToHoldRequest"/>
+            <output name="output1" message="tns:OfferToHoldResponse"/>
+        </operation>
+        <operation name="HoldConfirmation">
+            <input name="input2" message="tns:HoldConfirmationRequest"/>
+            <output name="output2" message="tns:HoldConfirmationResponse"/>
+        </operation>
+        <operation name="BookCancellation">
+            <input name="input3" message="tns:BookCancellationRequest"/>
+            <output name="output3" message="tns:BookCancellationResponse"/>
+        </operation>
+        <operation name="CheckoutConfirmation">
+            <input name="input4" message="tns:CheckoutConfirmationRequest"/>
+            <output name="output4" message="tns:CheckoutConfirmationResponse"/>
+        </operation>
+    </portType>
+    <plnk:partnerLinkType name="BookLoanCallbackWSDL">
+        <!-- A partner link type is automatically generated when a new port type is added. Partner link types are used by BPEL processes. 
+In a BPEL process, a partner link represents the interaction between the BPEL process and a partner service. Each partner link is associated with a partner link type.
+A partner link type characterizes the conversational relationship between two services. The partner link type can have one or two roles.-->
+        <plnk:role name="BookLoanCallbackWSDLPortTypeRole" portType="tns:BookLoanCallbackWSDLPortType"/>
+    </plnk:partnerLinkType>
+</definitions>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<casa xmlns="http://java.sun.com/xml/ns/casa" xmlns:ns1="BookLoanCA" xmlns:ns2="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" xmlns:ns3="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" xmlns:ns4="http://karelia.fi/edu/wsdl/BookStatus" xmlns:ns5="http://enterprise.netbeans.org/bpel/BookLoan/bookLoan" xmlns:ns6="http://enterprise.netbeans.org/bpel/BookLoan/bookLoanCB" xmlns:ns7="http://enterprise.netbeans.org/bpel/BookStatus/bookStatus" xmlns:xlink="http://www.w3.org/2000/xlink">
+    <endpoints>
+        <endpoint endpoint-name="casaPort1" interface-name="ns2:BookLoanWSDLPortType" name="endpoint1" service-name="ns1:BookLoanCAService1"/>
+        <endpoint endpoint-name="casaPort2" interface-name="ns3:BookLoanCallbackWSDLPortType" name="endpoint2" service-name="ns1:BookLoanCAService2"/>
+        <endpoint endpoint-name="casaPort3" interface-name="ns4:BookStatusPortType" name="endpoint3" service-name="ns1:BookLoanCAService3"/>
+        <endpoint display-name="BookLoanPL" endpoint-name="BookLoanWSDLPortTypeRole_myRole" file-path="bookLoan.bpel" interface-name="ns2:BookLoanWSDLPortType" name="endpoint4" process-name="bookLoan" service-name="ns5:BookLoanPL"/>
+        <endpoint display-name="BookLoanCBPL" endpoint-name="BookLoanCallbackWSDLPortTypeRole_myRole" file-path="bookLoanCB.bpel" interface-name="ns3:BookLoanCallbackWSDLPortType" name="endpoint5" process-name="bookLoanCB" service-name="ns6:BookLoanCBPL"/>
+        <endpoint display-name="BookStatusPL" endpoint-name="LoanProcessTypeRole_myRole" file-path="bookStatus.bpel" interface-name="ns4:BookStatusPortType" name="endpoint6" process-name="bookStatus" service-name="ns7:BookStatusPL"/>
+        <endpoint display-name="BookStatusPL" endpoint-name="LoanProcessTypeRole_partnerRole" file-path="bookLoan.bpel" interface-name="ns4:BookStatusPortType" name="endpoint7" process-name="bookLoan" service-name="ns5:BookStatusPL"/>
+        <endpoint display-name="BookLoanCBPL" endpoint-name="BookLoanCallbackWSDLPortTypeRole_partnerRole" file-path="bookLoan.bpel" interface-name="ns3:BookLoanCallbackWSDLPortType" name="endpoint8" process-name="bookLoan" service-name="ns5:BookLoanCBPL"/>
+    </endpoints>
+    <service-units>
+        <service-engine-service-unit artifacts-zip="BookLoan.jar" component-name="sun-bpel-engine" defined="true" description="Represents this Service Unit" internal="true" name="BookLoanCA-BookLoan" unit-name="BookLoan" unknown="false" x="232" y="113">
+            <provides endpoint="endpoint4"/>
+            <provides endpoint="endpoint5"/>
+            <provides endpoint="endpoint6"/>
+            <consumes endpoint="endpoint7"/>
+            <consumes endpoint="endpoint8"/>
+        </service-engine-service-unit>
+        <binding-component-service-unit artifacts-zip="sun-http-binding.jar" component-name="sun-http-binding" description="Represents this Service Unit" name="BookLoanCA-sun-http-binding" unit-name="sun-http-binding">
+            <ports>
+                <port bindingType="soap" x="67" y="151">
+                    <link xlink:href="../jbiasa/BookLoanCA.wsdl#xpointer(/definitions/service[@name='BookLoanCAService1']/port[@name='casaPort1'])" xlink:type="simple"/>
+                    <consumes endpoint="endpoint1"/>
+                    <provides endpoint="endpoint1"/>
+                </port>
+                <port bindingType="soap" x="67" y="326">
+                    <link xlink:href="../jbiasa/BookLoanCA.wsdl#xpointer(/definitions/service[@name='BookLoanCAService2']/port[@name='casaPort2'])" xlink:type="simple"/>
+                    <consumes endpoint="endpoint2"/>
+                    <provides endpoint="endpoint2"/>
+                </port>
+                <port bindingType="soap" x="67" y="435">
+                    <link xlink:href="../jbiasa/BookLoanCA.wsdl#xpointer(/definitions/service[@name='BookLoanCAService3']/port[@name='casaPort3'])" xlink:type="simple"/>
+                    <consumes endpoint="endpoint3"/>
+                    <provides endpoint="endpoint3"/>
+                </port>
+            </ports>
+        </binding-component-service-unit>
+    </service-units>
+    <connections>
+        <connection consumer="endpoint3" provider="endpoint6" state="new"/>
+        <connection consumer="endpoint2" provider="endpoint5" state="new"/>
+        <connection consumer="endpoint1" provider="endpoint4" state="unchanged"/>
+        <connection consumer="endpoint8" provider="endpoint2" state="new"/>
+        <connection consumer="endpoint7" provider="endpoint3" state="new"/>
+        <connection consumer="endpoint7" provider="endpoint6" state="deleted"/>
+        <connection consumer="endpoint8" provider="endpoint5" state="deleted"/>
+    </connections>
+    <porttypes>
+        <link xlink:href="../jbiasa/BookLoanCA.wsdl#xpointer(/definitions/portType[@name='dummyCasaPortType'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/BookLoan/BookLoanCallbackWSDL.wsdl#xpointer(/definitions/portType[@name='BookLoanCallbackWSDLPortType'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/BookLoan/BookLoanWSDL.wsdl#xpointer(/definitions/portType[@name='BookLoanWSDLPortType'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/BookLoan/BookStatus.wsdl#xpointer(/definitions/portType[@name='BookStatusPortType'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/BookLoanCA.wsdl#xpointer(/definitions/portType[@name='dummyCasaPortType'])" xlink:type="simple"/>
+    </porttypes>
+    <bindings>
+        <link xlink:href="../jbiasa/BookLoanCA.wsdl#xpointer(/definitions/binding[@name='casaBinding1'])" xlink:type="simple"/>
+        <link xlink:href="../jbiasa/BookLoanCA.wsdl#xpointer(/definitions/binding[@name='casaBinding2'])" xlink:type="simple"/>
+        <link xlink:href="../jbiasa/BookLoanCA.wsdl#xpointer(/definitions/binding[@name='casaBinding3'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/BookLoanCA.wsdl#xpointer(/definitions/binding[@name='casaBinding1'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/BookLoanCA.wsdl#xpointer(/definitions/binding[@name='casaBinding2'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/BookLoanCA.wsdl#xpointer(/definitions/binding[@name='casaBinding3'])" xlink:type="simple"/>
+    </bindings>
+    <services>
+        <link xlink:href="../jbiasa/BookLoanCA.wsdl#xpointer(/definitions/service[@name='BookLoanCAService1'])" xlink:type="simple"/>
+        <link xlink:href="../jbiasa/BookLoanCA.wsdl#xpointer(/definitions/service[@name='BookLoanCAService2'])" xlink:type="simple"/>
+        <link xlink:href="../jbiasa/BookLoanCA.wsdl#xpointer(/definitions/service[@name='BookLoanCAService3'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/BookLoanCA.wsdl#xpointer(/definitions/service[@name='BookLoanCAService1'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/BookLoanCA.wsdl#xpointer(/definitions/service[@name='BookLoanCAService2'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/BookLoanCA.wsdl#xpointer(/definitions/service[@name='BookLoanCAService3'])" xlink:type="simple"/>
+    </services>
+    <regions>
+        <region name="WSDL Endpoints" width="150"/>
+        <region name="JBI Modules" width="500"/>
+        <region name="External Modules" width="200"/>
+    </regions>
+</casa>

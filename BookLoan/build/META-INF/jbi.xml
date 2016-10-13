@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jbi xmlns="http://java.sun.com/xml/ns/jbi" xmlns:ns0="http://enterprise.netbeans.org/bpel/BookLoan/bookLoan" xmlns:ns1="http://karelia.fi/edu/wsdl/BookStatus" xmlns:ns2="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" xmlns:ns3="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" xmlns:ns4="http://enterprise.netbeans.org/bpel/BookLoan/bookLoanCB" xmlns:ns5="http://enterprise.netbeans.org/bpel/BookStatus/bookStatus" xmlns:ns6="http://www.sun.com/jbi/descriptor/service-unit" version="1.0">
+    <services binding-component="false">
+        <provides endpoint-name="BookLoanWSDLPortTypeRole_myRole" interface-name="ns3:BookLoanWSDLPortType" service-name="ns0:BookLoanPL">
+            <ns6:display-name>BookLoanPL</ns6:display-name>
+            <ns6:process-name>bookLoan</ns6:process-name>
+            <ns6:file-path>bookLoan.bpel</ns6:file-path>
+        </provides>
+        <provides endpoint-name="BookLoanCallbackWSDLPortTypeRole_myRole" interface-name="ns2:BookLoanCallbackWSDLPortType" service-name="ns4:BookLoanCBPL">
+            <ns6:display-name>BookLoanCBPL</ns6:display-name>
+            <ns6:process-name>bookLoanCB</ns6:process-name>
+            <ns6:file-path>bookLoanCB.bpel</ns6:file-path>
+        </provides>
+        <provides endpoint-name="LoanProcessTypeRole_myRole" interface-name="ns1:BookStatusPortType" service-name="ns5:BookStatusPL">
+            <ns6:display-name>BookStatusPL</ns6:display-name>
+            <ns6:process-name>bookStatus</ns6:process-name>
+            <ns6:file-path>bookStatus.bpel</ns6:file-path>
+        </provides>
+        <consumes endpoint-name="LoanProcessTypeRole_partnerRole" interface-name="ns1:BookStatusPortType" service-name="ns0:BookStatusPL">
+            <ns6:display-name>BookStatusPL</ns6:display-name>
+            <ns6:process-name>bookLoan</ns6:process-name>
+            <ns6:file-path>bookLoan.bpel</ns6:file-path>
+        </consumes>
+        <consumes endpoint-name="BookLoanCallbackWSDLPortTypeRole_partnerRole" interface-name="ns2:BookLoanCallbackWSDLPortType" service-name="ns0:BookLoanCBPL">
+            <ns6:display-name>BookLoanCBPL</ns6:display-name>
+            <ns6:process-name>bookLoan</ns6:process-name>
+            <ns6:file-path>bookLoan.bpel</ns6:file-path>
+        </consumes>
+    </services>
+</jbi>

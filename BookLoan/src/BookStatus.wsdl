@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="BookStatus" 
+    targetNamespace="http://karelia.fi/edu/wsdl/BookStatus"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:tns="http://karelia.fi/edu/wsdl/library/bookstatus"
+    xmlns:ns="http://karelia.fi/edu/wsdl/BookStatus" 
+    xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype">
+    <types/>
+    <message name="GetBookStatusRequest">
+        <part name="bookid" type="xsd:string"/>
+        <part name="customerId" type="xsd:string"/>
+    </message>
+    <message name="GetBookStatusResponse">
+        <part name="bookStatus" type="xsd:string"/>
+    </message>
+    <message name="UpdateBookStatusRequest">
+        <part name="bookId" type="xsd:string"/>
+        <part name="customerId" type="xsd:string"/>
+        <part name="status" type="xsd:string"/>
+    </message>
+    <message name="UpdateBookStatusResponse">
+        <part name="response" type="xsd:string"/>
+    </message>
+    <portType name="BookStatusPortType">
+        <operation name="GetBookStatus">
+            <input name="GetBookStatusInput" message="ns:GetBookStatusRequest"/>
+            <output name="GetBookStatusOutput" message="ns:GetBookStatusResponse"/>
+        </operation>
+        <operation name="UpdateBookStatus">
+            <input name="UpdateBookStatusInput" message="ns:UpdateBookStatusRequest"/>
+            <output name="UpdateBookStatusOutput" message="ns:UpdateBookStatusResponse"/>
+        </operation>
+    </portType>
+    <plnk:partnerLinkType name="BookStatus">
+        <!-- A partner link type is automatically generated when a new port type is added. Partner link types are used by BPEL processes. 
+In a BPEL process, a partner link represents the interaction between the BPEL process and a partner service. Each partner link is associated with a partner link type.
+A partner link type characterizes the conversational relationship between two services. The partner link type can have one or two roles.-->
+        <plnk:role name="LoanProcessTypeRole" portType="ns:BookStatusPortType"/>
+    </plnk:partnerLinkType>
+</definitions>

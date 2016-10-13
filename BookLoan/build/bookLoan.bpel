@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<process
+    name="bookLoan"
+    targetNamespace="http://enterprise.netbeans.org/bpel/BookLoan/bookLoan"
+    xmlns:tns="http://enterprise.netbeans.org/bpel/BookLoan/bookLoan"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+    xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
+    xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2"
+    xmlns:sxat="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Attachment"
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:sxdh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/DataHandling" xmlns:ns="http://karelia.fi/edu/wsdl/BookStatus" xmlns:ns0="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL">
+    <import namespace="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" location="BookLoanWSDL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" location="BookLoanCallbackWSDL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://karelia.fi/edu/wsdl/BookStatus" location="BookStatus.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <partnerLinks>
+        <partnerLink name="BookStatusPL" partnerLinkType="ns:BookStatus" partnerRole="LoanProcessTypeRole"/>
+        <partnerLink name="BookLoanCBPL" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" partnerLinkType="tns:BookLoanCallbackWSDL" partnerRole="BookLoanCallbackWSDLPortTypeRole"/>
+        <partnerLink name="BookLoanPL" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" partnerLinkType="tns:BookLoanWSDL" myRole="BookLoanWSDLPortTypeRole"/>
+    </partnerLinks>
+    <variables>
+        <variable name="CheckoutConfirmationOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:CheckoutConfirmationResponse"/>
+        <variable name="CheckoutConfirmationIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:CheckoutConfirmationRequest"/>
+        <variable name="BookCancellationOut1" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:BookCancellationResponse"/>
+        <variable name="BookCancellationIn1" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:BookCancellationRequest"/>
+        <variable name="BookCancellationOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:BookCancellationResponse"/>
+        <variable name="BookCancellationIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:BookCancellationRequest"/>
+        <variable name="UpdateBookStatusOut1" messageType="ns:UpdateBookStatusResponse"/>
+        <variable name="UpdateBookStatusToHoldIn" messageType="ns:UpdateBookStatusRequest"/>
+        <variable name="customerid" type="xs:string"/>
+        <variable name="bookid" type="xs:string"/>
+        <variable name="UpdateBookStatusOut" messageType="ns:UpdateBookStatusResponse"/>
+        <variable name="UpdateBookStatusIn" messageType="ns:UpdateBookStatusRequest"/>
+        <variable name="GetBookStatusOut" messageType="ns:GetBookStatusResponse"/>
+        <variable name="GetBookStatusIn" messageType="ns:GetBookStatusRequest"/>
+        <variable name="Finish" type="xs:boolean"/>
+        <variable name="HoldConfirmationOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:HoldConfirmationResponse"/>
+        <variable name="HoldConfirmationIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:HoldConfirmationRequest"/>
+        <variable name="DeclineHoldIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" messageType="tns:DeclineHoldRequest"/>
+        <variable name="HoldIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" messageType="tns:HoldRequest"/>
+        <variable name="OfferToHoldOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:OfferToHoldResponse"/>
+        <variable name="OfferToHoldIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" messageType="tns:OfferToHoldRequest"/>
+        <variable name="BookStatus" type="xs:string"/>
+        <variable name="BookOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" messageType="tns:BookResponse"/>
+        <variable name="BookIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" messageType="tns:BookRequest"/>
+    </variables>
+    <correlationSets>
+        <correlationSet name="BookLoanCorrelationSet" properties="ns0:bookid ns0:customerid"/>
+    </correlationSets>
+    <sequence>
+        <receive name="ReceiveBookLoanRequest" createInstance="yes" partnerLink="BookLoanPL" operation="Book" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" portType="tns:BookLoanWSDLPortType" variable="BookIn">
+            <sxt:trace>
+                <sxt:log level="info" location="onComplete">
+                    <from>concat('LOAN:START:', $BookIn.bookid, ',', $BookIn.customerid)</from>
+                </sxt:log>
+            </sxt:trace>
+            <correlations>
+                <correlation set="BookLoanCorrelationSet" initiate="yes"/>
+            </correlations>
+        </receive>
+        <assign name="StoreIncomingVars">
+            <copy>
+                <from>false()</from>
+                <to variable="Finish"/>
+            </copy>
+            <copy>
+                <from variable="BookIn" part="bookid"/>
+                <to variable="bookid"/>
+            </copy>
+            <copy>
+                <from variable="BookIn" part="customerid"/>
+                <to variable="customerid"/>
+            </copy>
+            <copy>
+                <from>'Loan Process Start'</from>
+                <to variable="BookOut" part="result"/>
+            </copy>
+        </assign>
+        <reply name="ReplyBookRequest" partnerLink="BookLoanPL" operation="Book" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" portType="tns:BookLoanWSDLPortType" variable="BookOut"/>
+        <repeatUntil name="RepeatUntilOnLoan">
+            <sequence name="Sequence1">
+                <assign name="PrepareForGetStatusCall">
+                    <copy>
+                        <from variable="bookid"/>
+                        <to variable="GetBookStatusIn" part="bookid"/>
+                    </copy>
+                    <copy>
+                        <from variable="customerid"/>
+                        <to variable="GetBookStatusIn" part="customerId"/>
+                    </copy>
+                </assign>
+                <invoke name="GetBookStatus" partnerLink="BookStatusPL" operation="GetBookStatus" portType="ns:BookStatusPortType" inputVariable="GetBookStatusIn" outputVariable="GetBookStatusOut"/>
+                <assign name="AssignCallResults">
+                    <copy>
+                        <from variable="GetBookStatusOut" part="bookStatus"/>
+                        <to variable="BookStatus"/>
+                    </copy>
+                </assign>
+                <if name="IfOnLoan">
+                    <condition>'OnLoan' = $BookStatus</condition>
+                    <sequence name="Sequence2">
+                        <assign name="PrepareSendOffer">
+                            <copy>
+                                <from variable="bookid"/>
+                                <to variable="OfferToHoldIn" part="bookid"/>
+                            </copy>
+                            <copy>
+                                <from variable="customerid"/>
+                                <to variable="OfferToHoldIn" part="customerid"/>
+                            </copy>
+                        </assign>
+                        <invoke name="SendOfferToHold" partnerLink="BookLoanCBPL" operation="OfferToHold" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" portType="tns:BookLoanCallbackWSDLPortType" inputVariable="OfferToHoldIn" outputVariable="OfferToHoldOut"/>
+                        <pick name="WaitForHoldOfferResponse">
+                            <onMessage partnerLink="BookLoanPL" operation="Hold" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" portType="tns:BookLoanWSDLPortType" variable="HoldIn">
+                                <correlations>
+                                    <correlation set="BookLoanCorrelationSet" initiate="no"/>
+                                </correlations>
+                                <sequence name="Sequence3">
+                                    <assign name="Prepare">
+                                        <sxt:trace>
+                                            <sxt:log level="info" location="onStart">
+                                                <from>concat('LOAN:HOLD', $bookid, ',', $customerid)</from>
+                                            </sxt:log>
+                                        </sxt:trace>
+                                        <copy>
+                                            <from variable="customerid"/>
+                                            <to variable="UpdateBookStatusToHoldIn" part="customerId"/>
+                                        </copy>
+                                        <copy>
+                                            <from variable="bookid"/>
+                                            <to variable="UpdateBookStatusToHoldIn" part="bookId"/>
+                                        </copy>
+                                        <copy>
+                                            <from>'Hold'</from>
+                                            <to variable="UpdateBookStatusToHoldIn" part="status"/>
+                                        </copy>
+                                    </assign>
+                                    <invoke name="HoldBook" partnerLink="BookStatusPL" operation="UpdateBookStatus" portType="ns:BookStatusPortType" inputVariable="UpdateBookStatusToHoldIn" outputVariable="UpdateBookStatusOut1"/>
+                                    <assign name="ManageCalls">
+                                        <copy>
+                                            <from variable="bookid"/>
+                                            <to variable="HoldConfirmationIn" part="bookid"/>
+                                        </copy>
+                                        <copy>
+                                            <from variable="customerid"/>
+                                            <to variable="HoldConfirmationIn" part="customerid"/>
+                                        </copy>
+                                    </assign>
+                                    <invoke name="ConfirmHold" partnerLink="BookLoanCBPL" operation="HoldConfirmation" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" portType="tns:BookLoanCallbackWSDLPortType" inputVariable="HoldConfirmationIn" outputVariable="HoldConfirmationOut"/>
+                                    <wait name="Wait2Weeks">
+                                        <sxt:trace>
+                                            <sxt:log level="info" location="onStart">
+                                                <from>concat('LOAN:WAIT2WKS:', $bookid, ',', $customerid)</from>
+                                            </sxt:log>
+                                        </sxt:trace>
+                                        <for>'P0Y0M0DT0H0M0S'</for>
+                                    </wait>
+                                </sequence>
+                            </onMessage>
+                            <onMessage partnerLink="BookLoanPL" operation="DeclineHold" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanWSDL" portType="tns:BookLoanWSDLPortType" variable="DeclineHoldIn">
+                                <correlations>
+                                    <correlation set="BookLoanCorrelationSet" initiate="no"/>
+                                </correlations>
+                                <sequence name="Sequence5">
+                                    <assign name="FinishNow">
+                                        <copy>
+                                                <from>true()</from>
+                                                    <to variable="Finish"/>
+                                            </copy>
+                                    </assign>
+                                    <assign name="PrepCancelled">
+                                        <copy>
+                                            <from variable="bookid"/>
+                                            <to variable="BookCancellationIn" part="bookid"/>
+                                        </copy>
+                                        <copy>
+                                            <from variable="customerid"/>
+                                            <to variable="BookCancellationIn" part="customerid"/>
+                                        </copy>
+                                    </assign>
+                                    <invoke name="Cancelled" partnerLink="BookLoanCBPL" operation="BookCancellation" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" portType="tns:BookLoanCallbackWSDLPortType" inputVariable="BookCancellationIn" outputVariable="BookCancellationOut"/>
+                                </sequence>
+                            </onMessage>
+                            <onAlarm>
+                                <documentation>Wait 1 week</documentation>
+                                <for>'P0Y0M7DT0H0M0.0S'</for>
+                                <sequence name="Sequence6">
+                                    <assign name="FinishTheLoop">
+                                        <copy>
+                                                <from>true()</from>
+                                                    <to variable="Finish"/>
+                                            </copy>
+                                    </assign>
+                                    <assign name="Prep2Cancelled">
+                                        <copy>
+                                            <from variable="bookid"/>
+                                            <to variable="BookCancellationIn1" part="bookid"/>
+                                        </copy>
+                                        <copy>
+                                            <from variable="customerid"/>
+                                            <to variable="BookCancellationIn1" part="customerid"/>
+                                        </copy>
+                                    </assign>
+                                    <invoke name="InvokeCancelled" partnerLink="BookLoanCBPL" operation="BookCancellation" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" portType="tns:BookLoanCallbackWSDLPortType" inputVariable="BookCancellationIn1" outputVariable="BookCancellationOut1"/>
+                                </sequence>
+                            </onAlarm>
+                        </pick>
+                    </sequence>
+                    <elseif>
+                        <condition>$BookStatus = 'Available'</condition>
+                        <sequence name="Sequence4">
+                            <assign name="PrepareCall">
+                                <copy>
+                                    <from variable="bookid"/>
+                                    <to variable="UpdateBookStatusIn" part="bookId"/>
+                                </copy>
+                                <copy>
+                                    <from variable="customerid"/>
+                                    <to variable="UpdateBookStatusIn" part="customerId"/>
+                                </copy>
+                                <copy>
+                                    <from>'OnLoan'</from>
+                                    <to variable="UpdateBookStatusIn" part="status"/>
+                                </copy>
+                            </assign>
+                            <invoke name="UpdateBookStatus" partnerLink="BookStatusPL" operation="UpdateBookStatus" portType="ns:BookStatusPortType" inputVariable="UpdateBookStatusIn" outputVariable="UpdateBookStatusOut"/>
+                            <assign name="PrepForChecout">
+                                <copy>
+                                    <from variable="bookid"/>
+                                    <to variable="CheckoutConfirmationIn" part="bookid"/>
+                                </copy>
+                                <copy>
+                                    <from variable="customerid"/>
+                                    <to variable="CheckoutConfirmationIn" part="customerid"/>
+                                </copy>
+                            </assign>
+                            <invoke name="Checkout" partnerLink="BookLoanCBPL" operation="CheckoutConfirmation" xmlns:tns="http://j2ee.netbeans.org/wsdl/BookLoan/src/BookLoanCallbackWSDL" portType="tns:BookLoanCallbackWSDLPortType" inputVariable="CheckoutConfirmationIn" outputVariable="CheckoutConfirmationOut">
+                                <sxt:trace>
+                                    <sxt:log level="info" location="onComplete">
+                                        <from>concat('LOAN:CHECKOUT:', $bookid, ',', $customerid)</from>
+                                    </sxt:log>
+                                </sxt:trace>
+                            </invoke>
+                        </sequence>
+                    </elseif>
+                </if>
+            </sequence>
+            <condition>$Finish or 'Available' = $BookStatus</condition>
+        </repeatUntil>
+    </sequence>
+</process>
